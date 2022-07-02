@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 
 import UserReposListItem from "../user-repos-list-item";
 import Spinner from "../spinner/spinner";
+import ErrorIndicator from "../error-indicator/error-indicator";
 
 import withGitHubService from "../hoc/with-github-service";
 
-import { reposLoaded } from "../../action/actions";
+import { reposLoaded, reposFailed } from "../../action/actions";
 
 import "./user-repos-list.css";
 
@@ -21,8 +22,8 @@ class UserReposList extends Component {
         .then(data => {
             this.props.reposLoaded(data);
         })
-        .catch(err => {
-            console.log("error " + err);
+        .catch(() => {
+            this.props.reposFailed()
         })
     }
 
@@ -30,10 +31,14 @@ class UserReposList extends Component {
 
         if (this.props.loading) return <Spinner />;
 
+        if (this.props.errorReposLoaded) return <ErrorIndicator />;
+
+        if (this.props.repos.message) return <h1 className="display-6">Not Found</h1>
+
         return (
             <div className="user-repos-list-item-wrapper">
                 {
-                    this.props.repos.map(({ id ,full_name, html_url, language }) => {
+                    this.props.repos.map(({ id = "" ,full_name = "", html_url = "", language = "" }) => {
                         return <UserReposListItem key={ id } repos= { { full_name: full_name, html_url: html_url, language: language } } />
                     })
                 }
@@ -46,12 +51,14 @@ const mapStateToProps = (state) => {
     return {
         repos: state.repos,
         loading: state.loading,
+        errorReposLoaded: state.errorReposLoaded,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        reposLoaded: (data) => dispatch(reposLoaded(data))
+        reposLoaded: (data) => dispatch(reposLoaded(data)),
+        reposFailed: () => dispatch(reposFailed)
     }
 }
 

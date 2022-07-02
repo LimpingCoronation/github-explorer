@@ -6,6 +6,9 @@ const reposLoaded = (payload) => {
     }
 }
 
+const reposFailed = { type: "FETCH_USER_REPOS_LOADED" }
+
 export {
     reposLoaded,
+    reposFailed,
 }
