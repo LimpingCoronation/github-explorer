@@ -1,21 +1,50 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-const Search = ({ total }) => {
-    return (
-        <React.Fragment>
-            <form className="form-group mt20">
-                <div className="row">
-                    <div className="col-md-10">
-                        <input className="form-control" placeholder="Username" />
+import { userInputAction, reposRequested } from "../../action/actions";
+
+class Search extends Component {
+
+    onChange = (e) => {
+        this.props.userInputAction(e.target.value);
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        this.props.reposRequested();
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <form className="form-group mt20" onSubmit={ this.onSubmit }>
+                    <div className="row">
+                        <div className="col-md-10">
+                            <input className="form-control" placeholder="Username" onChange={ this.onChange } />
+                        </div>
+                        <div className="col-md-2">
+                            <button type="submit" className="btn btn-primary">Search</button>
+                        </div>
                     </div>
-                    <div className="col-md-2">
-                        <button type="submit" className="btn btn-primary">Search</button>
-                    </div>
-                </div>
-            </form>
-            <h5 className="text-muted mt10">Repositories: { total }</h5>
-        </React.Fragment>
-    );
+                </form>
+                <h5 className="text-muted mt10">Repositories: 5</h5>
+            </React.Fragment>
+        );
+    }
 }
 
-export default Search;
+const mapStateToProps = (state) => {
+    return {
+        repos: state.repos,
+        userInput: state.userInput,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        userInputAction: (user) => dispatch(userInputAction(user)),
+        reposRequested: () => dispatch(reposRequested())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

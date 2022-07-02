@@ -18,13 +18,19 @@ class UserReposList extends Component {
     }
 
     getDataFromService = () => {
-        this.props.gitHubService.getUserRepos("LimpingCoronation")
+        this.props.gitHubService.getUserRepos(this.props.user)
         .then(data => {
             this.props.reposLoaded(data);
         })
         .catch(() => {
             this.props.reposFailed()
         })
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.user !== prevProps.user) {
+            this.getDataFromService();
+        }
     }
 
     render() {
@@ -52,6 +58,7 @@ const mapStateToProps = (state) => {
         repos: state.repos,
         loading: state.loading,
         errorReposLoaded: state.errorReposLoaded,
+        user: state.user
     }
 }
 
@@ -62,4 +69,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default withGitHubService(connect(mapStateToProps, mapDispatchToProps)(UserReposList))
+export default withGitHubService(connect(mapStateToProps, mapDispatchToProps)(UserReposList));
