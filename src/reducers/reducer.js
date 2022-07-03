@@ -1,10 +1,16 @@
 const initialState = {
     repos: [],
     userInput: null,
-    user: null,
+    user: "",
     loading: true,
-    loaded: false,
     errorReposLoaded: false,
+    message: false,
+    count: 0,
+    details: {
+        file: null,
+        loading: true,
+        hasError: false,
+    }
 }
 
 const reducer = (state = initialState, action) => {
@@ -14,32 +20,57 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 repos: [],
                 loading: false,
-                loaded: false,
                 errorReposLoaded: true,
+                message: true
             };
         case "FETCH_USER_REPOS_LOADED":
             return {
                 ...state,
                 repos: action.payload,
                 loading: false,
-                loaded: true,
                 errorReposLoaded: false,
+                message: false,
+                details: {
+                    file: null,
+                    loading: true,
+                }
             };
         case "FETCH_USER_REPOS_REQUESTED":
-            if (state.loaded) return state;
             return {
                 ...state,
                 user: state.userInput,
                 repos: [],
                 loading: true,
-                loaded: true,
+                message: false,
                 errorReposLoaded: false,
             };
         case "USER_INPUT":
             return {
                 ...state,
-                loaded: false,
                 userInput: action.payload
+            }
+        case "FETCH_README_FILE_LOADED":
+            return {
+                ...state,
+                details: {
+                    file: action.payload,
+                    loading: false,
+                    hasError: false,
+                }
+            }
+        case "FETCH_README_FILE_FAILED":
+            return {
+                ...state,
+                details: {
+                    file: action.payload,
+                    loading: false,
+                    hasError: true,
+                }
+            }
+        case "FETCH_USER_LOADED":
+            return {
+                ...state,
+                count: action.payload,
             }
         default:
             return state;

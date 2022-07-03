@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./user-repos-list-item.css";
 
 const UserReposListItem = ({ repos }) => {
     return (
         <div className="user-repos-list-item">
-            <h3><a href={ repos.html_url } className="repos-link">{ repos.full_name }</a></h3>
+            <h3><Link to={`details/${repos.id}`} className="repos-link">{ repos.full_name }</Link></h3>
             <p className="lead">{ repos.language }</p>
         </div>
     );

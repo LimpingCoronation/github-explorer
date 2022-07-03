@@ -28,24 +28,36 @@ class UserReposList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.user !== prevProps.user) {
+        if (this.props.user !== prevProps.user || this.props.loading) {
             this.getDataFromService();
         }
     }
 
     render() {
 
+        const { repos = [] } = this.props;
+
         if (this.props.loading) return <Spinner />;
 
         if (this.props.errorReposLoaded) return <ErrorIndicator />;
 
-        if (this.props.repos.message) return <h1 className="display-6">Not Found</h1>
+        if (!this.props.user) {
+            return null;
+        }
+
+        if (typeof this.props.repos === "object" && this.props.repos.hasOwnProperty("message")) {
+            return <h1 className="display-6">Not Found</h1>;
+        }
+
+        if (this.props.repos.length === 0) {
+            return <h2>This user has no repositories</h2>;
+        }
 
         return (
             <div className="user-repos-list-item-wrapper">
                 {
-                    this.props.repos.map(({ id = "" ,full_name = "", html_url = "", language = "" }) => {
-                        return <UserReposListItem key={ id } repos= { { full_name: full_name, html_url: html_url, language: language } } />
+                    repos.map(({ id = "" ,full_name = "", html_url = "", language = "" }) => {
+                        return <UserReposListItem key={ id } repos= { { full_name: full_name, html_url: html_url, language: language, id: id } } />
                     })
                 }
             </div>
@@ -58,14 +70,15 @@ const mapStateToProps = (state) => {
         repos: state.repos,
         loading: state.loading,
         errorReposLoaded: state.errorReposLoaded,
-        user: state.user
+        user: state.user,
+        message: state.message,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         reposLoaded: (data) => dispatch(reposLoaded(data)),
-        reposFailed: () => dispatch(reposFailed)
+        reposFailed: () => dispatch(reposFailed),
     }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import withGitHubService from "../hoc/with-github-service";
 import { userInputAction, reposRequested } from "../../action/actions";
 
 class Search extends Component {
@@ -27,7 +28,6 @@ class Search extends Component {
                         </div>
                     </div>
                 </form>
-                <h5 className="text-muted mt10">Repositories: 5</h5>
             </React.Fragment>
         );
     }
@@ -37,14 +37,16 @@ const mapStateToProps = (state) => {
     return {
         repos: state.repos,
         userInput: state.userInput,
+        user: state.user,
+        reposCount: state.reposCount,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         userInputAction: (user) => dispatch(userInputAction(user)),
-        reposRequested: () => dispatch(reposRequested())
+        reposRequested: () => dispatch(reposRequested()),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default withGitHubService(connect(mapStateToProps, mapDispatchToProps)(Search));
