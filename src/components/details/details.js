@@ -38,13 +38,13 @@ class Details extends Component {
     
         if (this.props.hasError) return <Navigate to="/" />
     
+        let file = this.props.file == "404: Not Found" ? <h3 className="mt20">This project does not have a file README.md</h3> : <pre>{ this.props.file }</pre>
+
         return (
             <div>
                 <Link to="/">На главную</Link>
                 <h2>README.md</h2>
-                <pre>
-                    { this.props.file }
-                </pre>
+                { file }
             </div>
         );
     }

@@ -11,6 +11,11 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "tls": "^0.0.1",
+    "react-redux": "^8.0.2",
+    "react-router": "^5.3.3",
+    "react-router-dom": "^6.3.0",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -44,11 +49,6 @@
     "http": "^0.0.1-security",
     "https": "^1.0.0",
     "net": "^1.0.2",
-    "react-redux": "^8.0.2",
-    "react-router": "^5.3.3",
-    "react-router-dom": "^6.3.0",
-    "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1",
     "url": "^0.11.0"
   }
 }
